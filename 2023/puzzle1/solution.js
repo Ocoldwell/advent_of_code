@@ -24,9 +24,9 @@ for (let i = 0; i < content.length; i++) {
   // we create an array of all matched numbers & digits, m[1] = first capture group of the regex
   const matches = Array.from(content[i].matchAll(re), (m) => m[1]);
   // we convert the string numbers & digits into numbers
-  const digits = matches.map((x) => (ints[x] !== undefined ? ints[x] : +x));
+  const digits = matches.map((x) => (ints[x] ? ints[x] : +x));
   // we convert the array into a two digit number
   const number = digits[0] * 10 + digits[digits.length - 1];
   reduction.push(number);
 }
-const sum = r.reduce((a, b) => a + b, 0);
+const sum = reduction.reduce((a, b) => a + b, 0);
