@@ -4,7 +4,7 @@ const data = fs.readFileSync('./input.txt', 'utf8');
 const content = data.split('\n');
 
 const reduction = [];
-const ints = {
+const wordToNumberMap = {
   one: 1,
   two: 2,
   three: 3,
@@ -22,11 +22,12 @@ for (let i = 0; i < content.length; i++) {
   // part two we filter for numbers and words
   const re = /(?=(0|1|2|3|4|5|6|7|8|9|one|two|three|four|five|six|seven|eight|nine))/g;
   // we create an array of all matched numbers & digits, m[1] = first capture group of the regex
-  const matches = Array.from(content[i].matchAll(re), (m) => m[1]);
-  // we convert the string numbers & digits into numbers
-  const digits = matches.map((x) => (ints[x] ? ints[x] : +x));
+  // we check if the matched number is a word and if so we convert it to a number otherwise we cast it to a number
+  const matches = Array.from(content[i].matchAll(re), (m) => (wordToNumberMap[m[1]] ? wordToNumberMap[m[1]] : +m[1]));
   // we convert the array into a two digit number
-  const number = digits[0] * 10 + digits[digits.length - 1];
+  const number = matches[0] * 10 + matches[matches.length - 1];
+  console.log(number);
   reduction.push(number);
 }
 const sum = reduction.reduce((a, b) => a + b, 0);
+console.log(sum);
