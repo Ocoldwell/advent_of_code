@@ -53,6 +53,7 @@ for (let i = 0; i < split.length; i++) {
   // This is parsing the input
   const line = split[i];
   // This is where we will store each look at the cubes we store it as an array of bag objects.
+  /** @type {Bag[]} */
   const guessesList = [];
   const [_game, guesses] = line.split(':');
   const guess = guesses.split(';');
@@ -66,16 +67,16 @@ for (let i = 0; i < split.length; i++) {
     guessesList.push(guess);
   }
   // This checks if a game is valid -> a game is a line
-  const isValid = games.every(isValidGame);
+  const isValid = guessesList.every(isValidGame);
   // The id of a game is the index + 1, we could also access it from the _game variable but this is easier
   if (isValid) sum += i + 1;
   // This is the minimum of each colour of cube
   const minimum = createGuess(0, 0, 0);
   // This is the maximum of each colour of cube to get the minimum of each colour of cube
-  for (let game of games) {
-    minimum.red = Math.max(minimum.red, game.red);
-    minimum.green = Math.max(minimum.green, game.green);
-    minimum.blue = Math.max(minimum.blue, game.blue);
+  for (let guess of guessesList) {
+    minimum.red = Math.max(minimum.red, guess.red);
+    minimum.green = Math.max(minimum.green, guess.green);
+    minimum.blue = Math.max(minimum.blue, guess.blue);
   }
   // This is the power of the set of cubes
   const powerOfSetOfCubes = minimum.red * minimum.green * minimum.blue;
