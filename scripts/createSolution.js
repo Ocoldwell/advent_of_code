@@ -21,7 +21,7 @@ const packageJsonCopy = path.join(solutionDir, `/package.json`);
 const content = `
 // Solution for day ${day}
 
-function solve() {
+export function solve() {
   // TODO: Implement solution
   console.log('Solution for day ${day} not implemented yet!');
 }
@@ -29,6 +29,23 @@ function solve() {
 solve();
 `;
 fs.writeFileSync(solutionPath, content);
+
+const testContent = `
+import { test } from 'vitest'
+import { solve } from './solution'
+
+test('Test case 1', ({ expect }) => {
+  const input = '...' // replace with your input
+  const expected = '...' // replace with your expected output
+  const result = solve(input)
+  expect(result).toBe(expected)
+})
+
+// Add more test cases as needed
+`;
+
+const testPath = path.join(solutionDir, 'solution.test.ts');
+fs.writeFileSync(testPath, testContent);
 
 const tsconfigContent = fs.readFileSync(`${dirname}/template.tsconfig.json`, 'utf-8');
 fs.writeFileSync(tsconfig, tsconfigContent);
