@@ -1,0 +1,14 @@
+{
+  "name": "@2023/day1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "build": "tsc --build",
+    "run": "node dist/solution.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
