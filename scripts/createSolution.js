@@ -16,22 +16,31 @@ if (fs.existsSync(solutionPath)) {
 }
 
 const tsconfig = path.join(solutionDir, `/tsconfig.json`);
+const packageJsonCopy = path.join(solutionDir, `/package.json`);
 
 const content = `
 // Solution for day ${day}
 
 function solve() {
   // TODO: Implement solution
+  console.log('Solution for day ${day} not implemented yet!');
 }
 
 solve();
 `;
 fs.writeFileSync(solutionPath, content);
-const tsconfigContent = fs.readFileSync(`${dirname}/template.json`, 'utf-8');
+
+const tsconfigContent = fs.readFileSync(`${dirname}/template.tsconfig.json`, 'utf-8');
 fs.writeFileSync(tsconfig, tsconfigContent);
 
+//Load template package.json
+const templatePackageJsonPath = path.join(dirname, `./template.package.json`);
+const packageJsonContent = JSON.parse(fs.readFileSync(templatePackageJsonPath, 'utf-8'));
+//Write to name
+packageJsonContent.name = `@${year}/day${day}`;
+fs.writeFileSync(packageJsonCopy, JSON.stringify(packageJsonContent, null, 2));
 
-// Load package.json
+// Load global package.json
 const packageJsonPath = path.join(dirname, '../package.json');
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
 

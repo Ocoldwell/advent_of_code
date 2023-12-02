@@ -1,0 +1,14 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "devDependencies": {},
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --build",
+    "run": "npx ts-node solution.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
