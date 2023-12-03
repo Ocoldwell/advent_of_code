@@ -12,7 +12,8 @@
     "create-solution": "node ./scripts/createSolution.js",
     "2023-all": "for dir in 2023/*/; do ts-node $dir/solution.ts; done",
     "2023-1": "ts-node 2023/day1/solution.ts",
-    "2023-2": "ts-node 2023/day2/solution.ts"
+    "2023-2": "ts-node 2023/day2/solution.ts",
+    "2023-3": "ts-node 2023/day3/solution.ts"
   },
   "author": "",
   "license": "ISC",
