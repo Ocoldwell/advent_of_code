@@ -12,19 +12,21 @@ const content = readFileSync(`${__dirname}/input.txt`, 'utf8');
   }
   export function solve(content: string) {
     const {times, distances} = parseData(content);
-    const test: number[] = [];
+    const allWins: number[][] = [];
     times.forEach((time, index) => {
+      const wins: number[] = [];
       const recordDistance = distances[index];
       for (let buttonPress = 1; buttonPress <= time; buttonPress++) {
-        const distance = buttonPress * time;
-        console.log(buttonPress);
-        if (distance >= recordDistance) {
+        const distanceTravelled = (time - buttonPress) * buttonPress;
+        console.log(buttonPress, distanceTravelled, recordDistance, time);
+        if (distanceTravelled > recordDistance) {
           console.log(`Part 1: ${buttonPress}`);
-          test.push(buttonPress);
-          break;
+          wins.push(buttonPress);
         }
       }
+      allWins.push(wins);
     })
+    const test = allWins.reduce((acc, wins) => wins.length * acc, 1);
     console.log(test);
   }
 
