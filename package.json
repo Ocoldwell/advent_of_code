@@ -14,7 +14,8 @@
     "2023-1": "ts-node 2023/day1/solution.ts",
     "2023-2": "ts-node 2023/day2/solution.ts",
     "2023-3": "ts-node 2023/day3/solution.ts",
-    "2023-4": "ts-node 2023/day4/solution.ts"
+    "2023-4": "ts-node 2023/day4/solution.ts",
+    "2023-5": "ts-node 2023/day5/solution.ts"
   },
   "author": "",
   "license": "ISC",

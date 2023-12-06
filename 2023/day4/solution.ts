@@ -59,6 +59,3 @@ export function solve(inputData: string) {
 }
 
 solve(content);
-
-
-// 5625994
