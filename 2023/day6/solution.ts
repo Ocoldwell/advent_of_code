@@ -1,52 +1,52 @@
-const { readFileSync } = require('fs');
+import { readFileSync } from 'fs';
 const content = readFileSync(`${__dirname}/input.txt`, 'utf8');
-  // Solution for day 6
+// Solution for day 6
 
-  
-  function parseData(string: string) {
-    const lines = string.split('\n');
-    const times = lines[0].replace('Time: ', '').trim().split(' ').filter((s) => s).map((s) => +s);
-    const distances = lines[1].replace('Distance: ', '').trim().split(' ').filter((s) => s).map((s) => +s);
-    console.log(times, distances);
-    return { times, distances };
-  }
+const parseLine = (line: string, replaceString: string): number[] =>
+  line
+    .replace(replaceString, '')
+    .trim()
+    .split(' ')
+    .filter((s) => s)
+    .map((s) => +s);
 
-  function partOne(times: number[], distances: number[]) {
-    const allWins: number[][] = [];
-    times.forEach((time, index) => {
-      const wins: number[] = [];
-      const recordDistance = distances[index];
-      for (let buttonPress = 1; buttonPress <= time; buttonPress++) {
-        const distanceTravelled = (time - buttonPress) * buttonPress;
-        console.log(buttonPress, distanceTravelled, recordDistance, time);
-        if (distanceTravelled > recordDistance) {
-          wins.push(buttonPress);
-        }
-      }
-      allWins.push(wins);
-    });
-    const multiple = allWins.reduce((acc, wins) => wins.length * acc, 1);
-    return multiple;
-  }
+function parseData(string: string) {
+  const lines = string.split('\n');
+  const times = parseLine(lines[0], 'Time: ');
+  const distances = parseLine(lines[1], 'Distance: ');
+  const joinedTimes = +times.join('');
+  const joinedDistances = +distances.join('');
+  return { times, distances, joinedTimes, joinedDistances };
+}
 
-  function partTwo(times: number[], distances: number[]) {
-    const timesConcat = +times.join('');
-    const distancesConcat = +distances.join('');
+function calculateWinsAndProduct(times: number[], distances: number[]) {
+  // we could potentially wrap this in BigInt for very large numbers.
+  // Part one is the product of all the wins for each button press.
+  let totalProduct = 1;
+  let totalWins = 0;
+  times.forEach((time, index) => {
     let wins = 0;
-    const time = timesConcat
-    const recordDistance = distancesConcat;
-    for (let buttonPress = 1; buttonPress <= time; buttonPress++) {
+    const recordDistance = distances[index];
+    //we don't need to check the button at 0 or the last button as the sled will not move.
+    for (let buttonPress = 1; buttonPress < time -1; buttonPress++) {
+      // The distance travelled by a sled is equal to the time of the race minus the time it took to press the button, multiplied by the time it took to press the button.
       const distanceTravelled = (time - buttonPress) * buttonPress;
+      // if the distance travelled is greater than the record distance, then the sled wins.
       if (distanceTravelled > recordDistance) {
         wins++;
       }
     }
-    return wins;
-  }
+    totalProduct *= wins;
+    totalWins += wins;
+  });
+  return {totalProduct, totalWins};
+}
 
-  export function solve(content: string) {
-    const {times, distances} = parseData(content);
-    const partOneAnswer = partOne(times, distances);
-    const partTwoAnswer = partTwo(times, distances);
-    return { partOneAnswer, partTwoAnswer};
-  }
+export function solve(content: string) {
+  const { times, joinedTimes, distances, joinedDistances  } = parseData(content);
+  const {totalProduct: partOneAnswer} = calculateWinsAndProduct(times, distances);
+  const {totalWins: partTwoAnswer} = calculateWinsAndProduct([joinedTimes], [joinedDistances]);
+  return { partOneAnswer, partTwoAnswer };
+}
+
+solve(content);
