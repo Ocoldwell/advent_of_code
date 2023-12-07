@@ -19,7 +19,9 @@ function parseData(string: string) {
   return { times, distances, joinedTimes, joinedDistances };
 }
 
+//Brute force solution
 function calculateWinsAndProduct(times: number[], distances: number[]) {
+  console.time('calculateWinsAndProduct');
   // we could potentially wrap this in BigInt for very large numbers.
   // Part one is the product of all the wins for each button press.
   let totalProduct = 1;
@@ -28,7 +30,7 @@ function calculateWinsAndProduct(times: number[], distances: number[]) {
     let wins = 0;
     const recordDistance = distances[index];
     //we don't need to check the button at 0 or the last button as the sled will not move.
-    for (let buttonPress = 1; buttonPress < time -1; buttonPress++) {
+    for (let buttonPress = 1; buttonPress < time - 1; buttonPress++) {
       // The distance travelled by a sled is equal to the time of the race minus the time it took to press the button, multiplied by the time it took to press the button.
       const distanceTravelled = (time - buttonPress) * buttonPress;
       // if the distance travelled is greater than the record distance, then the sled wins.
@@ -39,13 +41,15 @@ function calculateWinsAndProduct(times: number[], distances: number[]) {
     totalProduct *= wins;
     totalWins += wins;
   });
-  return {totalProduct, totalWins};
+  console.timeEnd('calculateWinsAndProduct');
+  return { totalProduct, totalWins };
 }
 
 export function solve(content: string) {
-  const { times, joinedTimes, distances, joinedDistances  } = parseData(content);
-  const {totalProduct: partOneAnswer} = calculateWinsAndProduct(times, distances);
-  const {totalWins: partTwoAnswer} = calculateWinsAndProduct([joinedTimes], [joinedDistances]);
+  const { times, joinedTimes, distances, joinedDistances } = parseData(content);
+  const { totalProduct: partOneAnswer } = calculateWinsAndProduct(times, distances);
+  // Part two is the sum of totalWins of all the wins for each button press, but the times and distances are joined together.
+  const { totalWins: partTwoAnswer } = calculateWinsAndProduct([joinedTimes], [joinedDistances]);
   return { partOneAnswer, partTwoAnswer };
 }
 
