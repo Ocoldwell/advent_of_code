@@ -1,5 +1,5 @@
 import { test } from 'vitest';
-import { solve, parseData } from './solution';
+import { solve } from './solution';
 import { readFileSync } from 'fs';
 const content = readFileSync(`${__dirname}/input.test.txt`, 'utf8');
 
@@ -14,3 +14,4 @@ test('Solve part 2', ({ expect }) => {
   const result = solve(content);
   expect(result.jokerWinnings).toBe(expected);
 });
+
