@@ -43,7 +43,7 @@ const cardCountMap = (handArray: string[]): Map<string, number> => {
   return cardCounts;
 };
 
-const cardValue = (char: string): number => {
+const cardValue = (char: string, partTwo: boolean = false): number => {
   switch (char) {
     case 'A':
       return 14;
@@ -52,7 +52,7 @@ const cardValue = (char: string): number => {
     case 'Q':
       return 12;
     case 'J':
-      return 11;
+      return partTwo ? 1 : 11;
     case 'T':
       return 10;
     default:
@@ -76,9 +76,39 @@ const handRanker = (hand: HandData): HandData => {
   const handType = handTypes.find((handType) => handType.condition)!.type;
   const handRank = HandRank[handType];
   hand.rank = handRank;
-  hand.cardValue = handArray.map(cardValue);
+  hand.cardValue = handArray.map(char => cardValue(char));
   return hand;
 };
+
+const jokerHandRanker = (hand: HandData): HandData => {
+  const handArray = hand.hand.split('');
+  const arrayNoJokers = handArray.filter((char) => char !== 'J');
+  const numberOfJokers = handArray.filter((char) => char === 'J').length;
+  const cardCounts = cardCountMap(arrayNoJokers);
+  const counts = Array.from(cardCounts.values());
+
+  const handTypes: HandType[] = [
+    { type: 'fiveOfAKind', condition: counts.some((count) => count + numberOfJokers >= 5) || numberOfJokers === 5 },
+    { type: 'fourOfAKind', condition: counts.some((count) => count + numberOfJokers >= 4) },
+    {
+      type: 'fullHouse',
+      condition:
+        (counts.includes(3) && counts.includes(2)) ||
+        (counts.filter((count) => count === 2).length === 2 && numberOfJokers === 1) ||
+        (counts.includes(3) && numberOfJokers === 1),
+    },
+    { type: 'threeOfAKind', condition: counts.some((count) => count + numberOfJokers >= 3) },
+    { type: 'twoPair', condition: counts.filter((count) => count === 2).length === 2 || numberOfJokers === 2 },
+    { type: 'onePair', condition: counts.filter((count) => count === 2).length === 1 || numberOfJokers === 1 },
+    { type: 'highCard', condition: true },
+  ];
+
+  const handType = handTypes.find((handType) => handType.condition);
+  const handRank = HandRank[handType!.type];
+  hand.rank = handRank;
+  hand.cardValue = handArray.map((char) => cardValue(char, true));
+  return hand;
+}
 
 const compareHands = (handA: HandData, handB: HandData): number => {
   if (handA.rank !== handB.rank) {
@@ -96,9 +126,9 @@ const compareHands = (handA: HandData, handB: HandData): number => {
   return 0;
 }
 
-const rankHands = (hands: HandData[]): HandData[] => {
+const rankHands = (hands: HandData[], partTwo: boolean = false): HandData[] => {
   // We add a rank to each hand, add an array of CardValues and then sort by the rank.
-  const initialHandRanks = hands.map(handRanker).sort((a, b) => a.rank - b.rank);
+  const initialHandRanks = hands.map(partTwo ? jokerHandRanker : handRanker).sort((a, b) => a.rank - b.rank);
   // We then sort by the card values within each rank.
   let i = 0;
   while (i < initialHandRanks.length) {
@@ -117,11 +147,14 @@ const rankHands = (hands: HandData[]): HandData[] => {
 
 export function solve(content: string) {
   const data = parseData(content);
-  const ranks = rankHands(data);
-  console.log(ranks);
-  const totalWinnings = ranks.reduce((total, hand) => total + (hand.bid * hand.rank), 0);
-  return totalWinnings;
+  const ranks1 = rankHands(data)
+  const ranks2 = rankHands(data, true)
+
+  const totalWinnings = ranks1.reduce((total, hand) => total + (hand.bid * hand.rank), 0);
+  const jokerWinnings = ranks2.reduce((total, hand) => total + (hand.bid * hand.rank), 0);
+  return {totalWinnings, jokerWinnings};
 }
 
-const partOne = solve(content);
-console.log(partOne);
+const values = solve(content);
+console.table(values);
+
