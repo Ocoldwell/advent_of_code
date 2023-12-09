@@ -1,12 +1,12 @@
-import { test, expect } from 'vitest';
-import { calculate, calculateMinimum, parseInput } from './solution';
+import { test, expect } from "vitest";
+import { calculate, calculateMinimum, parseInput } from "./solution";
 
-test('calculate', () => {
+test("calculate", () => {
   // Arrange
   const split = [
-    'Game 1: 1 red, 5 blue, 1 green; 16 blue, 3 red; 6 blue, 5 red; 4 red, 7 blue, 1 green',
-    'Game 2: 4 blue; 4 red, 3 blue, 1 green; 4 red, 9 blue, 2 green; 5 blue, 7 green, 4 red',
-    'Game 3: 10 blue; 7 blue, 1 green; 19 blue, 1 green, 9 red',
+    "Game 1: 1 red, 5 blue, 1 green; 16 blue, 3 red; 6 blue, 5 red; 4 red, 7 blue, 1 green",
+    "Game 2: 4 blue; 4 red, 3 blue, 1 green; 4 red, 9 blue, 2 green; 5 blue, 7 green, 4 red",
+    "Game 3: 10 blue; 7 blue, 1 green; 19 blue, 1 green, 9 red",
   ];
   const bag = {
     red: 12,
@@ -21,7 +21,7 @@ test('calculate', () => {
   expect(result.sumOfPowerOfSetOfCubes).toBe(503);
 });
 
-test('calculateMinimum', ()=> {
+test("calculateMinimum", () => {
   // Arrange
   const bags = [
     { red: 1, green: 5, blue: 1 },
@@ -35,10 +35,11 @@ test('calculateMinimum', ()=> {
   expect(result.red).toBe(16);
   expect(result.green).toBe(7);
   expect(result.blue).toBe(5);
-})
+});
 
-test('parseInput', () => {
-  const input = 'Game 1: 1 red, 5 blue, 1 green; 16 blue, 3 red; 6 blue, 5 red; 4 red, 7 blue, 1 green';
+test("parseInput", () => {
+  const input =
+    "Game 1: 1 red, 5 blue, 1 green; 16 blue, 3 red; 6 blue, 5 red; 4 red, 7 blue, 1 green";
   // Act
   const result = parseInput(input);
   // Assert

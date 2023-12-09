@@ -1,27 +1,27 @@
-import { readFileSync } from 'fs';
-const content = readFileSync(`${__dirname}/input.txt`, 'utf8');
+import { readFileSync } from "fs";
+const content = readFileSync(`${__dirname}/input.txt`, "utf8");
 // Solution for day 6
 
 const parseLine = (line: string, replaceString: string): number[] =>
   line
-    .replace(replaceString, '')
+    .replace(replaceString, "")
     .trim()
-    .split(' ')
+    .split(" ")
     .filter((s) => s)
     .map((s) => +s);
 
 function parseData(string: string) {
-  const lines = string.split('\n');
-  const times = parseLine(lines[0], 'Time: ');
-  const distances = parseLine(lines[1], 'Distance: ');
-  const joinedTimes = +times.join('');
-  const joinedDistances = +distances.join('');
+  const lines = string.split("\n");
+  const times = parseLine(lines[0], "Time: ");
+  const distances = parseLine(lines[1], "Distance: ");
+  const joinedTimes = +times.join("");
+  const joinedDistances = +distances.join("");
   return { times, distances, joinedTimes, joinedDistances };
 }
 
 //Brute force solution
 function calculateWinsAndProduct(times: number[], distances: number[]) {
-  console.time('calculateWinsAndProduct');
+  console.time("calculateWinsAndProduct");
   // we could potentially wrap this in BigInt for very large numbers.
   // Part one is the product of all the wins for each button press.
   let totalProduct = 1;
@@ -41,15 +41,21 @@ function calculateWinsAndProduct(times: number[], distances: number[]) {
     totalProduct *= wins;
     totalWins += wins;
   });
-  console.timeEnd('calculateWinsAndProduct');
+  console.timeEnd("calculateWinsAndProduct");
   return { totalProduct, totalWins };
 }
 
 export function solve(content: string) {
   const { times, joinedTimes, distances, joinedDistances } = parseData(content);
-  const { totalProduct: partOneAnswer } = calculateWinsAndProduct(times, distances);
+  const { totalProduct: partOneAnswer } = calculateWinsAndProduct(
+    times,
+    distances,
+  );
   // Part two is the sum of totalWins of all the wins for each button press, but the times and distances are joined together.
-  const { totalWins: partTwoAnswer } = calculateWinsAndProduct([joinedTimes], [joinedDistances]);
+  const { totalWins: partTwoAnswer } = calculateWinsAndProduct(
+    [joinedTimes],
+    [joinedDistances],
+  );
   return { partOneAnswer, partTwoAnswer };
 }
 

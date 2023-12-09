@@ -1,5 +1,5 @@
-import fs from 'fs';
-const content = fs.readFileSync(`${__dirname}/input.txt`, 'utf8');
+import fs from "fs";
+const content = fs.readFileSync(`${__dirname}/input.txt`, "utf8");
 // Solution for day 5
 type MapData = {
   destination: number;
@@ -11,10 +11,10 @@ const parseLine = (line: number[]): MapData => {
   return { destination, source, range };
 };
 const parseMap = (map: string) => {
-  const lines = map.split('\n');
+  const lines = map.split("\n");
   const [name, ...rest] = lines;
-  const pName = name.replace(/:/g, '').replace('map', '').trim();
-  const mapNumbers = rest.map((line) => line.split(' ').map((s) => +s));
+  const pName = name.replace(/:/g, "").replace("map", "").trim();
+  const mapNumbers = rest.map((line) => line.split(" ").map((s) => +s));
   const mapData = mapNumbers.map(parseLine);
   return { name: pName, mapData };
 };
@@ -22,9 +22,9 @@ const parseData = (inputData: string) => {
   const maps = inputData.split(/\n{2,}/);
   const seedString = maps.shift();
   const seeds = seedString
-    ?.split(':')[1]
+    ?.split(":")[1]
     .trim()
-    .split(' ')
+    .split(" ")
     .map((s) => +s);
   const mapDict: Record<string, MapData[]> = {};
   maps.forEach((mapString) => {
@@ -40,13 +40,18 @@ const mapValue = (value: number, map: MapData[]): number => {
     // We have to check if this equals 0 as there is one instance in the input where the destination + value
     //  - sorce = 0 which then sets the value to 0, rather than the value.
     if (value >= source && value < source + range) {
-      return destination + value - source === 0 ? value : destination + value - source;   
+      return destination + value - source === 0
+        ? value
+        : destination + value - source;
     }
   }
   return value;
 };
 
-const partOne = (mapDict: Record<string, MapData[]>, seeds: number[]): number | undefined => {
+const partOne = (
+  mapDict: Record<string, MapData[]>,
+  seeds: number[],
+): number | undefined => {
   const maps = mapDict;
   let minValue: number = Number.MAX_VALUE;
   seeds.forEach((seed) => {
@@ -63,20 +68,21 @@ const partOne = (mapDict: Record<string, MapData[]>, seeds: number[]): number | 
 // and only checking those values and setting the results from the map to check next as we only need to check
 // the minimum value
 function partTwo(mapDict: Record<string, MapData[]>, seeds: number[]) {
-  console.time('partTwo');
+  console.time("partTwo");
   let minValue: number = Number.MAX_VALUE;
   const maps = Object.values(mapDict);
   for (let i = 0; i < seeds.length - 1; i += 2) {
     const start = seeds[i];
-    const end = start + seeds[i + 1] -1;
+    const end = start + seeds[i + 1] - 1;
     let valuesToCheck: number[] = [start, end];
     for (let k = 0; k < maps.length; k++) {
       const map = maps[k];
       const newValuesToCheck: number[] = [];
-      map.forEach(({source, range}) => {
+      map.forEach(({ source, range }) => {
         // Get the min and max of the range
         if (source >= start && source <= end) valuesToCheck.push(source);
-        if (source + range >= start && source + range <= end) valuesToCheck.push(source + range);
+        if (source + range >= start && source + range <= end)
+          valuesToCheck.push(source + range);
       });
       valuesToCheck.forEach((seed) => {
         const value = mapValue(seed, map);
@@ -86,7 +92,7 @@ function partTwo(mapDict: Record<string, MapData[]>, seeds: number[]) {
       valuesToCheck = newValuesToCheck;
     }
   }
-  console.timeEnd('partTwo');
+  console.timeEnd("partTwo");
   return minValue;
 }
 
@@ -96,7 +102,7 @@ export function solve(inputData: string) {
     const partOneMin = partOne(mapDict, seeds);
     const partTwoMin = partTwo(mapDict, seeds);
     console.table({ partOneMin, partTwoMin });
-    return {partOneMin, partTwoMin}
+    return { partOneMin, partTwoMin };
   }
 }
 

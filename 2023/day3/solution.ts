@@ -1,6 +1,6 @@
-import fs from 'fs';
-const content = fs.readFileSync(`${__dirname}/input.txt`, 'utf8');
-const contentMatrix = content.split('\n').map((line) => line.split(''));
+import fs from "fs";
+const content = fs.readFileSync(`${__dirname}/input.txt`, "utf8");
+const contentMatrix = content.split("\n").map((line) => line.split(""));
 
 type MatrixPosition = {
   i: number;
@@ -8,7 +8,7 @@ type MatrixPosition = {
 };
 
 function processMatrix(contentMatrix: string[][]): number[] {
-  let number = '';
+  let number = "";
   let start: MatrixPosition | null = null;
   let end: MatrixPosition | null = null;
   const parts: number[] = [];
@@ -24,9 +24,11 @@ function processMatrix(contentMatrix: string[][]): number[] {
         end = { i, j };
       } else {
         if (number.length > 0 && start !== null && end !== null) {
-          parts.push(...getPartsFromSubMatrix(contentMatrix, start, end, number));
+          parts.push(
+            ...getPartsFromSubMatrix(contentMatrix, start, end, number),
+          );
         }
-        number = '';
+        number = "";
       }
     }
   }
@@ -38,13 +40,21 @@ function getPartsFromSubMatrix(
   contentMatrix: string[][],
   start: MatrixPosition,
   end: MatrixPosition,
-  number: string
+  number: string,
 ): number[] {
   const parts: number[] = [];
 
-  for (let x = Math.max(0, start.i - 1); x <= Math.min(end.i + 1, contentMatrix.length - 1); x++) {
-    for (let y = Math.max(0, start.j - 1); y <= Math.min(end.j + 1, contentMatrix[x].length - 1); y++) {
-      if (contentMatrix[x][y] !== '.' && isNaN(+contentMatrix[x][y])) {
+  for (
+    let x = Math.max(0, start.i - 1);
+    x <= Math.min(end.i + 1, contentMatrix.length - 1);
+    x++
+  ) {
+    for (
+      let y = Math.max(0, start.j - 1);
+      y <= Math.min(end.j + 1, contentMatrix[x].length - 1);
+      y++
+    ) {
+      if (contentMatrix[x][y] !== "." && isNaN(+contentMatrix[x][y])) {
         parts.push(+number);
       }
     }
@@ -70,8 +80,8 @@ function findAdjacentNumbers(contentMatrix: string[][], i: number, j: number) {
 
   lines.forEach((line, lineIndex) => {
     if (line) {
-      let numberLeft = '';
-      let numberRight = '';
+      let numberLeft = "";
+      let numberRight = "";
       let left = isNaN(+line[j]) ? j - 1 : j;
       while (left >= 0 && !isNaN(+line[left])) {
         numberLeft = line[left] + numberLeft;
@@ -91,7 +101,9 @@ function findAdjacentNumbers(contentMatrix: string[][], i: number, j: number) {
           adjacentNumbers.push(+(numberLeft + numberRight));
         }
       } else {
-        adjacentNumbers.push(...[numberLeft, numberRight].filter(Boolean).map(Number));
+        adjacentNumbers.push(
+          ...[numberLeft, numberRight].filter(Boolean).map(Number),
+        );
       }
     }
   });
@@ -107,7 +119,7 @@ function findGears(contentMatrix: string[][]): [number, number][] {
   const gears: [number, number][] = [];
   for (let i = 0; i < contentMatrix.length; i++) {
     for (let j = 0; j < contentMatrix[i].length; j++) {
-      if (contentMatrix[i][j] === '*') {
+      if (contentMatrix[i][j] === "*") {
         const foundNumbers: number[] = findAdjacentNumbers(contentMatrix, i, j);
         if (foundNumbers.length === 2) {
           gears.push([foundNumbers[0], foundNumbers[1]]);
@@ -126,5 +138,5 @@ export function partTwo() {
 
 const sumOfParts = partOne();
 const sumOfGearRatios = partTwo();
-console.log('Part 1:', sumOfParts);
-console.log('Part 2:', sumOfGearRatios);
+console.log("Part 1:", sumOfParts);
+console.log("Part 2:", sumOfGearRatios);
